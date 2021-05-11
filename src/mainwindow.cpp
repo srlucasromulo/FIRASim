@@ -208,7 +208,7 @@ MainWindow::MainWindow(QWidget *parent)
     //geometry config vars
     QObject::connect(configwidget->v_DesiredFPS.get(), SIGNAL(wasEdited(VarPtr)), this, SLOT(changeTimer()));
     QObject::connect(configwidget->v_Division.get(), SIGNAL(wasEdited(VarPtr)), this, SLOT(restartSimulator()));
-    QObject::connect(configwidget->v_Robots_Count.get(), SIGNAL(wasEdited(VarPtr)), this, SLOT(restartSimulator()));
+    QObject::connect(configwidget->v_Robots_Count.get(), SIGNAL(wasEdited(VarPtr)), this, SLOT(changeRobotCount()));
 
     QObject::connect(configwidget->v_DivA_Field_Line_Width.get(), SIGNAL(wasEdited(VarPtr)), this, SLOT(restartSimulator()));
     QObject::connect(configwidget->v_DivA_Field_Length.get(), SIGNAL(wasEdited(VarPtr)), this, SLOT(restartSimulator()));
@@ -324,16 +324,35 @@ void MainWindow::update()
     int R = robotIndex(glwidget->Current_robot,glwidget->Current_team);
 
     const dReal* vv = dBodyGetLinearVel(glwidget->ssl->robots[R]->chassis->body);
-    static dVector3 lvv;
-    dVector3 aa;
+    
+//     static dVector3 lvv;
+//     dVector3 aa;
+//     aa[0]=(vv[0]-lvv[0])/configwidget->DeltaTime();
+//     aa[1]=(vv[1]-lvv[1])/configwidget->DeltaTime();
+//     aa[2]=(vv[2]-lvv[2])/configwidget->DeltaTime();
+//     robotwidget->vellabel->setText(QString::number(sqrt(vv[0]*vv[0]+vv[1]*vv[1]+vv[2]*vv[2]),'f',3));
+//     robotwidget->acclabel->setText(QString::number(sqrt(aa[0]*aa[0]+aa[1]*aa[1]+aa[2]*aa[2]),'f',3));
+//     lvv[0]=vv[0];
+//     lvv[1]=vv[1];
+//     lvv[2]=vv[2];
+    
+    /* editado */
+    static float lvv[5];
+    float aa[5];
     aa[0]=(vv[0]-lvv[0])/configwidget->DeltaTime();
     aa[1]=(vv[1]-lvv[1])/configwidget->DeltaTime();
     aa[2]=(vv[2]-lvv[2])/configwidget->DeltaTime();
-    robotwidget->vellabel->setText(QString::number(sqrt(vv[0]*vv[0]+vv[1]*vv[1]+vv[2]*vv[2]),'f',3));
-    robotwidget->acclabel->setText(QString::number(sqrt(aa[0]*aa[0]+aa[1]*aa[1]+aa[2]*aa[2]),'f',3));
+    aa[3]=(vv[3]-lvv[3])/configwidget->DeltaTime();
+    aa[4]=(vv[4]-lvv[4])/configwidget->DeltaTime();
+    robotwidget->vellabel->setText(QString::number(sqrt(vv[0]*vv[0]+vv[1]*vv[1]+vv[2]*vv[2]+vv[3]*vv[3]+vv[4]*vv[4]),'f',3));
+    robotwidget->acclabel->setText(QString::number(sqrt(aa[0]*aa[0]+aa[1]*aa[1]+aa[2]*aa[2]+aa[3]*aa[3]+aa[4]*aa[4]),'f',3));
     lvv[0]=vv[0];
     lvv[1]=vv[1];
     lvv[2]=vv[2];
+    lvv[3]=vv[3];
+    lvv[4]=vv[4];
+    /* */
+    
     QString ss;
     scorelabel->setText(QString("BLUE %1 x %2 YELLOW").arg(glwidget->ssl->goals_blue).arg(glwidget->ssl->goals_yellow));
     fpslabel->setText(QString("Frame rate: %1 fps").arg(ss.sprintf("%06.2f",glwidget->getFPS())));        
@@ -528,4 +547,25 @@ void MainWindow::withGoalKick(bool value)
 void MainWindow::fullSpeed(bool value)
 {
     glwidget->ssl->fullSpeed = value;
+}
+
+
+
+
+
+void MainWindow::changeRobotCount()
+{
+    auto newRobotCount = configwidget->Robots_Count();
+
+    if(newRobotCount < 0 || newRobotCount > MAX_ROBOT_COUNT) {
+        newRobotCount = std::min(std::max(0, newRobotCount), static_cast<int>(MAX_ROBOT_COUNT));
+        configwidget->v_Robots_Count->setInt(newRobotCount);
+    }
+
+    robotwidget->changeRobotCount(newRobotCount);
+    
+    int newCurrentRobot = std::min(newRobotCount - 1, glwidget->Current_robot);
+    robotwidget->changeCurrentRobot(newCurrentRobot);
+    restartSimulator();
+    changeCurrentRobot();
 }

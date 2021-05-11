@@ -40,6 +40,11 @@ public:
     QPushButton *onOffBtn,*setPoseBtn;
     GetPositionWidget* getPoseWidget;
     int id{};
+    
+    
+    void changeRobotCount(int newRobotCount);
+    void changeCurrentRobot(int CurrentRobotID);
+    
 public slots:
     void changeRobotOnOff(int,bool);
     void setPoseBtnClicked();

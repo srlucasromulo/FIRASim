@@ -67,6 +67,9 @@ public slots:
     void fullSpeed(bool value);
 
     int robotIndex(int robot,int team);
+    
+    void changeRobotCount();
+    
 private:
     int getInterval();    
     QTimer *timer;
