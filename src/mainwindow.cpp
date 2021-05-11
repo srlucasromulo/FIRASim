@@ -324,35 +324,16 @@ void MainWindow::update()
     int R = robotIndex(glwidget->Current_robot,glwidget->Current_team);
 
     const dReal* vv = dBodyGetLinearVel(glwidget->ssl->robots[R]->chassis->body);
-    
-//     static dVector3 lvv;
-//     dVector3 aa;
-//     aa[0]=(vv[0]-lvv[0])/configwidget->DeltaTime();
-//     aa[1]=(vv[1]-lvv[1])/configwidget->DeltaTime();
-//     aa[2]=(vv[2]-lvv[2])/configwidget->DeltaTime();
-//     robotwidget->vellabel->setText(QString::number(sqrt(vv[0]*vv[0]+vv[1]*vv[1]+vv[2]*vv[2]),'f',3));
-//     robotwidget->acclabel->setText(QString::number(sqrt(aa[0]*aa[0]+aa[1]*aa[1]+aa[2]*aa[2]),'f',3));
-//     lvv[0]=vv[0];
-//     lvv[1]=vv[1];
-//     lvv[2]=vv[2];
-    
-    /* editado */
-    static float lvv[5];
-    float aa[5];
+    static dVector3 lvv;
+    dVector3 aa;
     aa[0]=(vv[0]-lvv[0])/configwidget->DeltaTime();
     aa[1]=(vv[1]-lvv[1])/configwidget->DeltaTime();
     aa[2]=(vv[2]-lvv[2])/configwidget->DeltaTime();
-    aa[3]=(vv[3]-lvv[3])/configwidget->DeltaTime();
-    aa[4]=(vv[4]-lvv[4])/configwidget->DeltaTime();
-    robotwidget->vellabel->setText(QString::number(sqrt(vv[0]*vv[0]+vv[1]*vv[1]+vv[2]*vv[2]+vv[3]*vv[3]+vv[4]*vv[4]),'f',3));
-    robotwidget->acclabel->setText(QString::number(sqrt(aa[0]*aa[0]+aa[1]*aa[1]+aa[2]*aa[2]+aa[3]*aa[3]+aa[4]*aa[4]),'f',3));
+    robotwidget->vellabel->setText(QString::number(sqrt(vv[0]*vv[0]+vv[1]*vv[1]+vv[2]*vv[2]),'f',3));
+    robotwidget->acclabel->setText(QString::number(sqrt(aa[0]*aa[0]+aa[1]*aa[1]+aa[2]*aa[2]),'f',3));
     lvv[0]=vv[0];
     lvv[1]=vv[1];
     lvv[2]=vv[2];
-    lvv[3]=vv[3];
-    lvv[4]=vv[4];
-    /* */
-    
     QString ss;
     scorelabel->setText(QString("BLUE %1 x %2 YELLOW").arg(glwidget->ssl->goals_blue).arg(glwidget->ssl->goals_yellow));
     fpslabel->setText(QString("Frame rate: %1 fps").arg(ss.sprintf("%06.2f",glwidget->getFPS())));        
