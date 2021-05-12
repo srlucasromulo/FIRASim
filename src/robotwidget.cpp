@@ -71,24 +71,6 @@ void RobotWidget::setPicture(QImage* img)
     robotpic->setPixmap(QPixmap::fromImage(*img).scaled(128, 128, Qt::IgnoreAspectRatio, Qt::FastTransformation));
 }
 
-void RobotWidget::changeRobotOnOff(int _id,bool a)
-{
-    if (_id==id) {
-        if (a) onOffBtn->setText("Turn off");
-        else onOffBtn->setText("Turn on");
-    }
-}
-
-void RobotWidget::setPoseBtnClicked()
-{
-    getPoseWidget->show();
-}
-
-
-
-
-
-
 void RobotWidget::changeRobotCount(int newRobotCount) {
     // block signal emitting to avoid segmentation fault
     // if don't do this, CurrentIndexChange() signal will be emitted everytime adding/deleting item
@@ -114,4 +96,17 @@ void RobotWidget::changeRobotCount(int newRobotCount) {
 void RobotWidget::changeCurrentRobot(int CurrentRobotID) {
     CurrentRobotID = std::min(CurrentRobotID, robotCombo->count()-1);
     robotCombo->setCurrentIndex(CurrentRobotID);
+}
+
+void RobotWidget::changeRobotOnOff(int _id,bool a)
+{
+    if (_id==id) {
+        if (a) onOffBtn->setText("Turn off");
+        else onOffBtn->setText("Turn on");
+    }
+}
+
+void RobotWidget::setPoseBtnClicked()
+{
+    getPoseWidget->show();
 }

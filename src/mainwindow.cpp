@@ -277,6 +277,23 @@ void MainWindow::showHideSimulator(bool v)
     else {glwidget->hide();showsimulator->setChecked(false);}
 }
 
+void MainWindow::changeRobotCount()
+{
+    auto newRobotCount = configwidget->Robots_Count();
+
+    if(newRobotCount < 0 || newRobotCount > MAX_ROBOT_COUNT) {
+        newRobotCount = std::min(std::max(0, newRobotCount), static_cast<int>(MAX_ROBOT_COUNT));
+        configwidget->v_Robots_Count->setInt(newRobotCount);
+    }
+
+    robotwidget->changeRobotCount(newRobotCount);
+    
+    int newCurrentRobot = std::min(newRobotCount - 1, glwidget->Current_robot);
+    robotwidget->changeCurrentRobot(newCurrentRobot);
+    restartSimulator();
+    changeCurrentRobot();
+}
+
 void MainWindow::changeCurrentRobot()
 {
     glwidget->Current_robot=robotwidget->robotCombo->currentIndex();    
@@ -528,25 +545,4 @@ void MainWindow::withGoalKick(bool value)
 void MainWindow::fullSpeed(bool value)
 {
     glwidget->ssl->fullSpeed = value;
-}
-
-
-
-
-
-void MainWindow::changeRobotCount()
-{
-    auto newRobotCount = configwidget->Robots_Count();
-
-    if(newRobotCount < 0 || newRobotCount > MAX_ROBOT_COUNT) {
-        newRobotCount = std::min(std::max(0, newRobotCount), static_cast<int>(MAX_ROBOT_COUNT));
-        configwidget->v_Robots_Count->setInt(newRobotCount);
-    }
-
-    robotwidget->changeRobotCount(newRobotCount);
-    
-    int newCurrentRobot = std::min(newRobotCount - 1, glwidget->Current_robot);
-    robotwidget->changeCurrentRobot(newCurrentRobot);
-    restartSimulator();
-    changeCurrentRobot();
 }

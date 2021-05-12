@@ -41,6 +41,7 @@ public slots:
     void showHideConfig(bool v);
     void showHideSimulator(bool v);
     void changeCurrentRobot();
+    void changeRobotCount();
     void changeCurrentTeam();
 
     void changeBallMass();   
@@ -67,8 +68,6 @@ public slots:
     void fullSpeed(bool value);
 
     int robotIndex(int robot,int team);
-    
-    void changeRobotCount();
     
 private:
     int getInterval();    

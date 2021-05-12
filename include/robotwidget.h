@@ -41,11 +41,9 @@ public:
     GetPositionWidget* getPoseWidget;
     int id{};
     
-    
+public slots:
     void changeRobotCount(int newRobotCount);
     void changeCurrentRobot(int CurrentRobotID);
-    
-public slots:
     void changeRobotOnOff(int,bool);
     void setPoseBtnClicked();
 };
